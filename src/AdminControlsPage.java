@@ -26,6 +26,7 @@ import java.awt.FlowLayout;
 import javax.swing.BoxLayout;
 import javax.swing.ImageIcon;
 import javax.swing.UIManager;
+import javax.swing.UnsupportedLookAndFeelException;
 import javax.swing.border.BevelBorder;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.JTextField;
@@ -46,17 +47,18 @@ import javax.swing.JSeparator;
 import javax.swing.JPasswordField;
 import javax.swing.JLayeredPane;
 import javax.swing.JScrollPane;
+import javax.swing.border.MatteBorder;
+import java.awt.Frame;
+import java.awt.Dialog.ModalExclusionType;
+import javax.swing.ListSelectionModel;
 
 public class AdminControlsPage {
 
-	private JFrame frame;
+	private JFrame frmApp;
 	private JTextField textField;
 	private static JTable prodTBL;
 	private static JTable userTable;
 	private JTextField textField_1;
-	private JTextField userNameTxt;
-	private JPasswordField userPassTxT;
-	private JTextField removeUserTXT;
 	private static JTable productTable;
 	private JTextField searchTXT;
 	private JTextField txtProductName;
@@ -66,10 +68,16 @@ public class AdminControlsPage {
 	private JPanel tab2;
 	private JPanel tab3;
 	private JTextField txtPrice;
-	private JTextField userType;
 	private JTable table_1;
 	private JTextField textField_2;
 	private static JLabel welcomeLbl;
+	private JTextField usrNameTXT;
+	private JPasswordField passwordField;
+	private JTextField usrTypeTXT;
+	private JTextField textField_9;
+	private JTextField usrEmail;
+	private JTextField userAddress;
+	private static JTable tableUser1;
 
 	public JPanel getTab1() {
 		return tab1;
@@ -104,7 +112,7 @@ public class AdminControlsPage {
 	}
 
 	public JFrame getFrame() {
-		return frame;
+		return frmApp;
 	}
 
 	public JTextField getTextField() {
@@ -123,17 +131,7 @@ public class AdminControlsPage {
 		return textField_1;
 	}
 
-	public JTextField getTextField_2() {
-		return userNameTxt;
-	}
 
-	public JPasswordField getPasswordField() {
-		return userPassTxT;
-	}
-
-	public JTextField getTextField_3() {
-		return removeUserTXT;
-	}
 
 	public JTable getTable_2() {
 		return productTable;
@@ -163,7 +161,7 @@ public class AdminControlsPage {
 			public void run() {
 				try {
 					AdminControlsPage window = new AdminControlsPage();
-					window.frame.setVisible(true);
+					window.frmApp.setVisible(true);
 					//welcomeLabel();
 				} catch (Exception e) {
 					e.printStackTrace();
@@ -174,30 +172,46 @@ public class AdminControlsPage {
 
 	/**
 	 * Create the application.
+	 * @throws UnsupportedLookAndFeelException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws ClassNotFoundException 
 	 */
-	public AdminControlsPage() {
+	public AdminControlsPage() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
 		initialize();
 		welcomeLabel();
 	}
 
 	/**
 	 * Initialize the contents of the frame.
+	 * @throws UnsupportedLookAndFeelException 
+	 * @throws IllegalAccessException 
+	 * @throws InstantiationException 
+	 * @throws ClassNotFoundException 
 	 */
-	private void initialize() {
-		frame = new JFrame();
-		frame.setBounds(100, 100, 1022, 513);
-		frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+	private void initialize() throws ClassNotFoundException, InstantiationException, IllegalAccessException, UnsupportedLookAndFeelException {
+		UIManager.setLookAndFeel(UIManager.getSystemLookAndFeelClassName());
+		frmApp = new JFrame();
+		frmApp.setResizable(false);
+		frmApp.setTitle("App");
+		frmApp.setBounds(100, 100, 1022, 513);
+		frmApp.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
 
 		JSplitPane splitPane = new JSplitPane();
+		splitPane.setForeground(new Color(112, 128, 144));
+		splitPane.setBorder(null);
+		splitPane.setBackground(new Color(112, 128, 144));
 		splitPane.setResizeWeight(0.3);
-		frame.getContentPane().add(splitPane, BorderLayout.CENTER);
+		frmApp.getContentPane().add(splitPane, BorderLayout.CENTER);
 
 		JPanel panel = new JPanel();
+		panel.setBackground(new Color(112, 128, 144));
 		splitPane.setRightComponent(panel);
 		panel.setLayout(null);
 
 		JPanel panel_2 = new JPanel();
-		panel_2.setBackground(Color.BLACK);
+		panel_2.setForeground(new Color(112, 128, 144));
+		panel_2.setBackground(new Color(112, 128, 144));
 		panel_2.setBounds(0, 0, 699, 32);
 		panel.add(panel_2);
 		panel_2.setLayout(null);
@@ -367,10 +381,18 @@ public class AdminControlsPage {
 		Products.add(lblNewLabel_9);
 
 		JScrollPane scrollPane = new JScrollPane();
+		scrollPane.setBackground(new Color(112, 128, 144));
 		scrollPane.setBounds(10, 247, 694, 181);
 		Products.add(scrollPane);
 
 		productTable = new JTable();
+		productTable.setEditingColumn(0);
+		productTable.setSelectionMode(ListSelectionModel.SINGLE_INTERVAL_SELECTION);
+		productTable.setColumnSelectionAllowed(true);
+		productTable.setCellSelectionEnabled(true);
+		productTable.setGridColor(Color.BLACK);
+		productTable.setForeground(Color.WHITE);
+		productTable.setBackground(new Color(112, 128, 144));
 		scrollPane.setViewportView(productTable);
 
 		JPanel Users = new JPanel();
@@ -397,90 +419,55 @@ public class AdminControlsPage {
 		Users.add(textField_1);
 		textField_1.setColumns(10);
 
-		JButton addUserBtn = new JButton("Add User");
+		JButton addUserBtn = new JButton("Add Users");
+		addUserBtn.setFont(new Font("Tahoma", Font.BOLD, 13));
 		
 		  addUserBtn.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
+				/*
+				 * String name = userNameTxt.getText();
+				 * 
+				 * @SuppressWarnings("deprecation") String password = userPassTxT.getText();
+				 * 
+				 * @SuppressWarnings("deprecation") String userTy = userType.getText();
+				 * 
+				 * 
+				 * if(userTy.equals("admin")||userTy.equals("Admin")||userTy.equals("user")||
+				 * userTy.equals("User")) {
+				 * 
+				 * addUser(name, password, userTy); } else {
+				 * 
+				 * JOptionPane.showMessageDialog(null, "Wrong user type"); }
+				 * 
+				 * userNameTxt.setText(""); userPassTxT.setText(""); userType.setText("");
+				 */
 				
-				  String name = userNameTxt.getText();
-				  @SuppressWarnings("deprecation")
-				String password = userPassTxT.getText();
-				  @SuppressWarnings("deprecation")
-				String userTy = userType.getText();
-				  
-				  
-				  if(userTy.equals("admin")||userTy.equals("Admin")||userTy.equals("user")||userTy.equals("User")) {
-				  
-				  addUser(name, password, userTy);
-				  }
-				  else {
-					  
-					  JOptionPane.showMessageDialog(null, "Wrong user type");
-				  }
-				  
-				  	userNameTxt.setText("");
-				  	userPassTxT.setText("");
-				  	userType.setText("");
-				  
+				fillTable();
+				tabbedPane.setSelectedIndex(4);
+				
+				
 		  }});
 		 
 
-		addUserBtn.setBounds(82, 83, 110, 23);
+		addUserBtn.setBounds(52, 236, 175, 37);
 		Users.add(addUserBtn);
 
-		JButton removeUserBtn = new JButton("Remove User");
-		removeUserBtn.addActionListener(new ActionListener() {
-			public void actionPerformed(ActionEvent e) {
-				String name = removeUserTXT.getText();
-				removeUser(name);	
-				removeUserTXT.setText("");
-			}
-		});
-		
-		removeUserBtn.setBounds(427, 126, 110, 23);
-		Users.add(removeUserBtn);
-
-		JLabel lblNewLabel_2 = new JLabel("User Name");
-		lblNewLabel_2.setBounds(82, 112, 110, 14);
-		Users.add(lblNewLabel_2);
-
-		JLabel lblNewLabel_3 = new JLabel("User Name");
-		lblNewLabel_3.setBounds(427, 154, 110, 14);
-		Users.add(lblNewLabel_3);
-
-		userNameTxt = new JTextField();
-		userNameTxt.setBounds(82, 127, 110, 20);
-		Users.add(userNameTxt);
-		userNameTxt.setColumns(10);
-
-		JLabel lblNewLabel_4 = new JLabel("User Password");
-		lblNewLabel_4.setBounds(82, 154, 110, 14);
-		Users.add(lblNewLabel_4);
-
-		userPassTxT = new JPasswordField();
-		userPassTxT.setBounds(82, 166, 110, 20);
-		Users.add(userPassTxT);
-
-		removeUserTXT = new JTextField();
-		removeUserTXT.setBounds(427, 166, 110, 20);
-		Users.add(removeUserTXT);
-		removeUserTXT.setColumns(10);
-
 		JScrollPane scrollPane_1 = new JScrollPane();
-		scrollPane_1.setBounds(71, 241, 585, 158);
+		scrollPane_1.setBounds(52, 77, 585, 122);
 		Users.add(scrollPane_1);
 
 		userTable = new JTable();
 		scrollPane_1.setViewportView(userTable);
-
-		JLabel lblNewLabel_4_1 = new JLabel("User Type");
-		lblNewLabel_4_1.setBounds(82, 195, 110, 14);
-		Users.add(lblNewLabel_4_1);
 		
-		userType = new JTextField();
-		userType.setColumns(10);
-		userType.setBounds(82, 210, 110, 20);
-		Users.add(userType);
+		JButton btnRemoveUsers = new JButton("Remove Users");
+		btnRemoveUsers.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				tabbedPane.setSelectedIndex(5);
+			}
+		});
+		btnRemoveUsers.setFont(new Font("Tahoma", Font.BOLD, 13));
+		btnRemoveUsers.setBounds(469, 236, 168, 37);
+		Users.add(btnRemoveUsers);
 		
 		JPanel Account = new JPanel();
 		tabbedPane.addTab("New tab", null, Account, null);
@@ -516,56 +503,186 @@ public class AdminControlsPage {
 		lblNewLabel_11.setHorizontalAlignment(SwingConstants.LEFT);
 		lblNewLabel_11.setBounds(509, 221, 149, 14);
 		Account.add(lblNewLabel_11);
+		
+		JPanel AddUsersPanel = new JPanel();
+		AddUsersPanel.setLayout(null);
+		tabbedPane.addTab("New tab", null, AddUsersPanel, null);
+		
+		JButton addUserBtn_1 = new JButton("Add User");
+		addUserBtn_1.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent arg0) {
+				
+				String userName = usrNameTXT.getText();
+				String userPassword =String.valueOf(passwordField.getPassword());
+				String userType = usrTypeTXT.getText();
+				String userEmail = usrEmail.getText();
+				String userAddr = userAddress.getText();
+				
+				addUser(userName, userPassword, userType, userEmail, userAddr);
+				
+				usrNameTXT.setText("");
+				passwordField.setText("");
+				usrTypeTXT.setText("");
+				usrEmail.setText("");
+				userAddress.setText("");
+				
+				fillTable();
+				
+			}
+		});
+		addUserBtn_1.setBounds(250, 42, 187, 23);
+		AddUsersPanel.add(addUserBtn_1);
+		
+		JLabel lblNewLabel_2_1 = new JLabel("User Name");
+		lblNewLabel_2_1.setBounds(58, 76, 110, 14);
+		AddUsersPanel.add(lblNewLabel_2_1);
+		
+		usrNameTXT = new JTextField();
+		usrNameTXT.setColumns(10);
+		usrNameTXT.setBounds(58, 93, 177, 20);
+		AddUsersPanel.add(usrNameTXT);
+		
+		JLabel lblNewLabel_4_2 = new JLabel("User Password");
+		lblNewLabel_4_2.setBounds(58, 124, 110, 14);
+		AddUsersPanel.add(lblNewLabel_4_2);
+		
+		passwordField = new JPasswordField();
+		passwordField.setBounds(58, 141, 177, 20);
+		AddUsersPanel.add(passwordField);
+		
+		JScrollPane scrollPane_1_1 = new JScrollPane();
+		scrollPane_1_1.setBounds(70, 252, 585, 122);
+		AddUsersPanel.add(scrollPane_1_1);
+		
+		tableUser1 = new JTable();
+		scrollPane_1_1.setViewportView(tableUser1);
+		
+		JLabel lblNewLabel_4_1_1 = new JLabel("User Type");
+		lblNewLabel_4_1_1.setBounds(58, 172, 110, 14);
+		AddUsersPanel.add(lblNewLabel_4_1_1);
+		
+		usrTypeTXT = new JTextField();
+		usrTypeTXT.setColumns(10);
+		usrTypeTXT.setBounds(58, 187, 177, 20);
+		AddUsersPanel.add(usrTypeTXT);
+		
+		JButton btnNewButton_1 = new JButton("Refresh");
+		btnNewButton_1.addActionListener(new ActionListener() {
+				public void actionPerformed(ActionEvent e) {
+					
+					fillTable();
+				}
+		});
+		btnNewButton_1.setBounds(260, 220, 177, 23);
+		AddUsersPanel.add(btnNewButton_1);
+		
+		usrEmail = new JTextField();
+		usrEmail.setBounds(455, 93, 177, 20);
+		AddUsersPanel.add(usrEmail);
+		usrEmail.setColumns(10);
+		
+		userAddress = new JTextField();
+		userAddress.setBounds(455, 141, 177, 20);
+		AddUsersPanel.add(userAddress);
+		userAddress.setColumns(10);
+		
+		JLabel lblNewLabel_2 = new JLabel("Email Address");
+		lblNewLabel_2.setBounds(455, 76, 74, 14);
+		AddUsersPanel.add(lblNewLabel_2);
+		
+		JLabel lblNewLabel_3 = new JLabel("User address");
+		lblNewLabel_3.setBounds(455, 124, 74, 14);
+		AddUsersPanel.add(lblNewLabel_3);
+		
+		JPanel RemoveUsersPanel = new JPanel();
+		RemoveUsersPanel.setLayout(null);
+		tabbedPane.addTab("New tab", null, RemoveUsersPanel, null);
+		
+		JButton removeUserBtn_1_1 = new JButton("Remove User");
+		removeUserBtn_1_1.setBackground(new Color(112, 128, 144));
+		removeUserBtn_1_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		removeUserBtn_1_1.setBounds(196, 102, 255, 23);
+		RemoveUsersPanel.add(removeUserBtn_1_1);
+		
+		JLabel lblNewLabel_3_1_1 = new JLabel("User Name");
+		lblNewLabel_3_1_1.setHorizontalAlignment(SwingConstants.CENTER);
+		lblNewLabel_3_1_1.setFont(new Font("Tahoma", Font.PLAIN, 12));
+		lblNewLabel_3_1_1.setBounds(253, 46, 110, 14);
+		RemoveUsersPanel.add(lblNewLabel_3_1_1);
+		
+		textField_9 = new JTextField();
+		textField_9.setColumns(10);
+		textField_9.setBounds(196, 71, 255, 20);
+		RemoveUsersPanel.add(textField_9);
+		
+		JScrollPane scrollPane_1_1_1 = new JScrollPane();
+		scrollPane_1_1_1.setBackground(new Color(112, 128, 144));
+		scrollPane_1_1_1.setBounds(31, 227, 576, 107);
+		RemoveUsersPanel.add(scrollPane_1_1_1);
 
 		JPanel panel_1 = new JPanel();
 		panel_1.setBorder(new BevelBorder(BevelBorder.LOWERED, null, null, null, null));
-		panel_1.setBackground(Color.BLACK);
+		panel_1.setBackground(new Color(112, 128, 144));
 		splitPane.setLeftComponent(panel_1);
 		panel_1.setLayout(null);
 
 		JButton usersBTN = new JButton("Manage Users");
+		usersBTN.setFont(new Font("Arial", Font.BOLD, 13));
+		usersBTN.setBorder(null);
+		usersBTN.setBackground(new Color(112, 128, 144));
 		usersBTN.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				tabbedPane.setSelectedIndex(2);
 				fillUsersTable();
 			}
 		});
-		usersBTN.setBounds(59, 199, 199, 23);
+		usersBTN.setBounds(59, 188, 199, 34);
 		panel_1.add(usersBTN);
 
 		JButton btnBrowseProducts = new JButton("Browse Products");
+		btnBrowseProducts.setBorderPainted(false);
+		btnBrowseProducts.setBorder(null);
 		btnBrowseProducts.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent arg0) {
 				tabbedPane.setSelectedIndex(0);
 			}
 		});
-		btnBrowseProducts.setIcon(new ImageIcon(
-				"C:\\Users\\Marian Prime\\Desktop\\Java\\FarmacyApp\\src\\Icons\\button_browse-products.png"));
-		btnBrowseProducts.setForeground(new Color(255, 255, 240));
-		btnBrowseProducts.setFont(new Font("Arial", Font.PLAIN, 12));
-		btnBrowseProducts.setBackground(Color.BLACK);
+		btnBrowseProducts.setIcon(null);
+		btnBrowseProducts.setForeground(new Color(0, 0, 0));
+		btnBrowseProducts.setFont(new Font("Arial", Font.BOLD, 13));
+		btnBrowseProducts.setBackground(new Color(112, 128, 144));
 		btnBrowseProducts.setBounds(59, 59, 199, 34);
 		panel_1.add(btnBrowseProducts);
 
 		JButton btnNewButton_1_1 = new JButton("Manage Products");
+		btnNewButton_1_1.setFont(new Font("Arial", Font.BOLD, 13));
+		btnNewButton_1_1.setBorder(null);
+		btnNewButton_1_1.setOpaque(false);
+		btnNewButton_1_1.setBackground(new Color(112, 128, 144));
 		btnNewButton_1_1.addActionListener(new ActionListener() {
 			public void actionPerformed(ActionEvent e) {
 				tabbedPane.setSelectedIndex(1);
 				fillProductTable();
 			}
 		});
-		btnNewButton_1_1.setBounds(59, 135, 199, 23);
+		btnNewButton_1_1.setBounds(59, 124, 199, 34);
 		panel_1.add(btnNewButton_1_1);
 		
 		JButton myAccount = new JButton("My Account");
-		myAccount.setBounds(59, 259, 199, 23);
+		myAccount.setFont(new Font("Arial", Font.BOLD, 13));
+		myAccount.setBackground(new Color(112, 128, 144));
+		myAccount.setBorder(null);
+		myAccount.setBounds(59, 248, 199, 34);
 		panel_1.add(myAccount);
 		
 		JButton myOrdersBtn = new JButton("My orders");
-		myOrdersBtn.setBounds(59, 311, 199, 23);
+		myOrdersBtn.setFont(new Font("Arial", Font.BOLD, 13));
+		myOrdersBtn.setBackground(new Color(112, 128, 144));
+		myOrdersBtn.setBorder(null);
+		myOrdersBtn.setBounds(59, 311, 199, 34);
 		panel_1.add(myOrdersBtn);
 		
-		JLabel welcomeLbl = new JLabel("bla bla");
+		JLabel welcomeLbl = new JLabel("");
 		
 		welcomeLbl.setLabelFor(panel_1);
 		welcomeLbl.setHorizontalAlignment(SwingConstants.CENTER);
@@ -798,19 +915,71 @@ public class AdminControlsPage {
 		}
 
 	}
+	
+	public static void fillTable() {
+		
+		try {
+			Class.forName("com.mysql.jdbc.Driver");
+			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pharmacydb", "root", "root");
 
-	public static void addUser(String name, String password, String userType) {
+			PreparedStatement stmt = con.prepareStatement("SELECT * FROM useri");
+
+			DefaultTableModel tbl = new DefaultTableModel();
+			tbl.addColumn("User Name");
+			tbl.addColumn("User Password");
+			tbl.addColumn("User Type");
+			tbl.addColumn("User Address");
+			tbl.addColumn("User Email");
+
+			ResultSet result = stmt.executeQuery();
+
+			while (result.next()) {
+
+				System.out
+						.println(result.getInt(1) + result.getString("userName") + " " + result.getString("userEmail"));
+
+				Object[] row = new Object[6];
+
+				row[0] = result.getString("userName");
+				row[1] = result.getString("userPassword");
+				row[2] = result.getString("userType");
+				row[3] = result.getString("userAddress");
+				row[4] = result.getString("userEmail");
+
+				tbl.addRow(row);
+
+			}
+
+			tableUser1.setModel(tbl);
+			con.close();
+
+		} catch (Exception e) {
+
+			e.printStackTrace();
+			JOptionPane.showMessageDialog(null, "Database error");
+
+		}
+		
+		
+	}
+	
+	
+	
+
+	public static void addUser(String name, String password, String userType, String userAddress, String userEmail) {
 
 		try {
 			Class.forName("com.mysql.jdbc.Driver");
 			Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/pharmacydb", "root", "root");
 
 			PreparedStatement stmt = con
-					.prepareStatement("insert into useri (userName, userPassword, userType)" + "values(?, ?, ?)");
+					.prepareStatement("insert into useri (userName, userPassword, userType, userAddress, userEmail)" + "values(?, ?, ?, ?, ?)");
 
 			stmt.setString(1, name);
 			stmt.setString(2, password);
 			stmt.setString(3, userType);
+			stmt.setString(4, userAddress);
+			stmt.setString(5, userEmail);
 
 			stmt.execute();
 
@@ -984,6 +1153,4 @@ public class AdminControlsPage {
 		}
 		
 	}
-	
-	
 }
